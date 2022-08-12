@@ -22,13 +22,6 @@ do
     read -e -p "Please enter the path to the ISO file: " FILE
 done
 
-# Mount ISO to a temporary directory (read only)
-ISO_MOUNT_DIRECTORY=$(mktemp -d)
-mount -o loop,ro "$FILE" "$ISO_MOUNT_DIRECTORY"
-
 # Copy content of the ISO to a defined read/write directory
 mkdir -p iso
-cp -r "$ISO_MOUNT_DIRECTORY"/* iso
-
-# Umount read only ISO
-umount $ISO_MOUNT_DIRECTORY
+cat $FILE | bsdtar -C iso -xf -
